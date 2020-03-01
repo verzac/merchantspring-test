@@ -1,4 +1,5 @@
 import ebayService from "../services/ebay.service";
+import { EbayError } from '../errors';
 
 export interface ConsolidatedEbayProduct { // TL:DR; this is what's actually useful to us
   title: string;

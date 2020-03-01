@@ -3,15 +3,22 @@ import logger from './utils/logger';
 import cors from 'cors';
 import healthCheck from './utils/healthCheck';
 import productController from './controllers/product.controller';
+import withErrorHandling from './utils/withErrorHandling';
 
 const app = express();
 const PORT_NUMBER = 8080;
-app.use(cors);
 
+// middlewares
+app.use(cors());
+app.use(express.json());
+// app.use(express.urlencoded());
+
+// routes
 app.get('/.ping', (req, res) => {
-  res.send({
+  logger.info('Ping!');
+  return res.status(200).json({
     message: 'Pong!',
-  }).status(200);
+  });
 });
 
 app.get('/.health', async (req, res) => {
@@ -23,19 +30,27 @@ app.get('/.health', async (req, res) => {
     logger.error(e);
     status = 'DOWN';
   }
-  res.send({
+  return res.status(status === 'UP' ? 200 : 503).json({
     status: status
-  }).status(status === 'UP' ? 200 : 503);
+  });
 });
 
-app.get('/product-search', async (req, res) => {
+app.get('/product-search', withErrorHandling(async (req, res) => {
   let keywords: string = req.query.keywords;
   if (!keywords) {
-    res.send({
+    return res.json({
       'message': 'You must pass in the ?keywords query param (e.g. ?keywords=ipad).',
     }).status(400);
   }
-  res.send(await productController.getProducts(keywords)).status(200);
+  return res.json(await productController.getProducts(keywords)).status(200);
+}));
+
+// error handlers
+app.use(function (err, req, res, next) {
+  logger.error(err);
+  return res.status(500).json({
+    message: 'An unexpected error has occurred.'
+  });
 });
 
 app.listen(PORT_NUMBER, () => logger.info(`Server started. Listening at ${PORT_NUMBER}.`));

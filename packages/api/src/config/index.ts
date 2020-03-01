@@ -2,11 +2,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-function getRequiredEnv(envVarKey: string) {
+function getRequiredEnv(envVarKey: string): string {
   const envVarVal = process.env[envVarKey];
   if (!envVarVal) {
     throw new Error(`Unable to load environment variable ${envVarKey}.`)
   }
+  return envVarVal;
 }
 
 export default {

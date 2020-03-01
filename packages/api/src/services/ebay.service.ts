@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 import _ from 'lodash';
+import logger from '../utils/logger';
 
 interface EbayFindItemsByKeywordsResponse {
   findItemsByKeywordsResponse: Array<{
@@ -38,19 +39,25 @@ const DEFAULT_HEADERS = {
 };
 
 async function findProducts(keywords: string): Promise<Array<EbayProduct>> {
-  const result: EbayFindItemsByKeywordsResponse = await axios.get('https://svcs.ebay.com/services/search/FindingService/v1', {
-    params: {
-      'OPERATION-NAME': 'findItemsByKeywords',
-      'SERVICE-VERSION': '1.0.0',
-      'SECURITY-APPNAME': config.ebayAppId,
-      'RESPONSE-DATA-FORMAT': 'JSON',
-      'keywords': keywords,
-      'paginationInput.entriesPerPage': 50,
-    },
-    headers: DEFAULT_HEADERS,
-  });
-  return result.findItemsByKeywordsResponse[0].searchResult[0].item;
-  
+  try {
+    const result: EbayFindItemsByKeywordsResponse = await axios.get('https://svcs.ebay.com/services/search/FindingService/v1', {
+      params: {
+        'OPERATION-NAME': 'findItemsByKeywords',
+        'SERVICE-VERSION': '1.0.0',
+        'SECURITY-APPNAME': config.ebayAppId,
+        'RESPONSE-DATA-FORMAT': 'JSON',
+        'keywords': keywords,
+        'paginationInput.entriesPerPage': 50,
+      },
+      headers: DEFAULT_HEADERS,
+    }).then(res => res.data);
+    return result.findItemsByKeywordsResponse[0]
+      .searchResult[0]
+      .item;
+  } catch (e) {
+    logger.error('Unable to find products.', e);
+    throw e;
+  }
 }
 
 export default {

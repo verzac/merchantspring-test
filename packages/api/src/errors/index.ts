@@ -1,1 +1,1 @@
-class EbayError extends Error {};
+export class EbayError extends Error {};
