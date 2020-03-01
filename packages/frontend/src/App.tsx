@@ -1,8 +1,14 @@
 import React from 'react';
-import { Typography, createStyles, Theme, withStyles, WithStyles, TextField, Box, FormLabel, Button, CircularProgress } from '@material-ui/core';
+import { Typography, createStyles, Theme, withStyles, WithStyles, TextField, Box, FormLabel, Button, CircularProgress, LinearProgress } from '@material-ui/core';
 import EbayService, { ConsolidatedEbayProduct } from './services/EbayService';
 import ProductTable from './components/ProductTable';
 import PageSection from './components/PageSection';
+import DataCard from './components/datacards/SimpleDataCard';
+import AveragePriceDataCard from './components/datacards/AveragePriceDataCard';
+import FreeShippingListingPercentageDataCard from './components/datacards/FreeShippingListingPercentageDataCard';
+import MinPriceDataCard from './components/datacards/MinPriceDataCard';
+import MaxPriceDataCard from './components/datacards/MaxPriceDataCard';
+import AverageTitleLengthDataCard from './components/datacards/AverageTitleLengthDataCard';
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -18,13 +24,17 @@ const App: React.FC<WithStyles<typeof styles>> = (props) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [formSearchQuery, setFormSearchQuery] = React.useState('');
   const [products, setProducts] = React.useState<Array<ConsolidatedEbayProduct> | undefined>(undefined);
+  const [error, setError] = React.useState<any | undefined>(undefined);
   const { classes } = props;
   function onSubmitSearch(event: React.FormEvent<HTMLFormElement>) {
     setIsLoading(true);
     event.preventDefault();
     EbayService.findProduct(formSearchQuery)
       .then(products => setProducts(products))
-      .finally(() => setIsLoading(false));
+      .catch(e => {
+        setError(e);
+        console.error(e);
+      }).finally(() => setIsLoading(false));
   }
   function onChangeSearchQuery(event: any) {
     setFormSearchQuery(event.target.value);
@@ -50,11 +60,20 @@ const App: React.FC<WithStyles<typeof styles>> = (props) => {
       </form>
     </PageSection>
     <PageSection>
-      {isLoading && <CircularProgress/>}
+      {isLoading && <LinearProgress />}
       {!isLoading && products && <>
         <Typography variant="h2">Results</Typography>
+        <Typography>Click on each product to go to their eBay page.</Typography>
+        <Box display="flex" flexDirection="row" justifyContent="center" flexWrap="wrap">
+          <AveragePriceDataCard products={products} />
+          <MinPriceDataCard products={products} />
+          <MaxPriceDataCard products={products} />
+          <FreeShippingListingPercentageDataCard products={products} />
+          <AverageTitleLengthDataCard products={products} />
+        </Box>
         <ProductTable products={products} />
       </>}
+      {error && <Typography color="error">An unexpected error has occurred. Please try again.</Typography>}
     </PageSection>
   </div>);
 }
