@@ -1,0 +1,1 @@
+class EbayError extends Error {};

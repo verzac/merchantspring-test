@@ -15,7 +15,8 @@ const ProductTable: React.FC<ProductTableProp> = (props) => {
           <TableCell>Product Name</TableCell>
           <TableCell>SKU</TableCell>
           <TableCell>Price</TableCell>
-          <TableCell>Shipping</TableCell>
+          <TableCell>Shipping Type</TableCell>
+          <TableCell></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
