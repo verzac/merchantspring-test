@@ -30,6 +30,9 @@ export interface EbayProduct { // note that the interface doesn't include ALL da
     convertedCurrentPrice: Array<EbayPrice>;
     sellingState: 'Active' | 'Canceled' | 'Ended' | 'EndedWithSales' | 'EndedWithoutSales';
   }>;
+  galleryURL: Array<string>;
+  viewItemURL: Array<string>;
+  location: Array<string>;
 }
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, createStyles, Theme, withStyles, WithStyles, TextField, Box, FormLabel, Button, CircularProgress } from '@material-ui/core';
-import EbayService, { EbayProduct } from './services/EbayService';
+import EbayService, { ConsolidatedEbayProduct } from './services/EbayService';
 import ProductTable from './components/ProductTable';
 import PageSection from './components/PageSection';
 
@@ -17,12 +17,12 @@ const styles = (theme: Theme) => createStyles({
 const App: React.FC<WithStyles<typeof styles>> = (props) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [formSearchQuery, setFormSearchQuery] = React.useState('');
-  const [products, setProducts] = React.useState<Array<EbayProduct> | undefined>(undefined);
+  const [products, setProducts] = React.useState<Array<ConsolidatedEbayProduct> | undefined>(undefined);
   const { classes } = props;
   function onSubmitSearch(event: React.FormEvent<HTMLFormElement>) {
     setIsLoading(true);
     event.preventDefault();
-    EbayService.findProduct()
+    EbayService.findProduct(formSearchQuery)
       .then(products => setProducts(products))
       .finally(() => setIsLoading(false));
   }

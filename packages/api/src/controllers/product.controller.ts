@@ -9,6 +9,9 @@ export interface ConsolidatedEbayProduct { // TL:DR; this is what's actually use
     value: string;
   };
   country: string;
+  imgUrl?: string;
+  url: string;
+  location: string;
 }
 
 async function getProducts(keywords: string): Promise<Array<ConsolidatedEbayProduct>> {
@@ -18,7 +21,7 @@ async function getProducts(keywords: string): Promise<Array<ConsolidatedEbayProd
   }
   try {
     return ebayProducts.map<ConsolidatedEbayProduct>(ebayProduct => {
-      return {
+      return <ConsolidatedEbayProduct>{
         title: ebayProduct.title.join(' | '),
         freeShipping: ebayProduct.shippingInfo.some(shippingInfo => shippingInfo.shippingType[0] === 'Free'),
         price: {
@@ -26,6 +29,9 @@ async function getProducts(keywords: string): Promise<Array<ConsolidatedEbayProd
           value: ebayProduct.sellingStatus[0].convertedCurrentPrice[0].__value__,
         },
         country: ebayProduct.country[0],
+        imgUrl: ebayProduct.galleryURL[0],
+        url: ebayProduct.viewItemURL[0],
+        location: ebayProduct.location[0],
       };
     });
   } catch (e) {
