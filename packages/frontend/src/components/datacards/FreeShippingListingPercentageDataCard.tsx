@@ -1,4 +1,3 @@
-import { ConsolidatedEbayProduct } from "../../services/EbayService";
 import React from 'react';
 import DataCard, { ProductDataCardProp } from "./SimpleDataCard";
 

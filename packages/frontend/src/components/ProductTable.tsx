@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableContainer, Card, TableRow, TableHead, TableCell, TableBody, createStyles, WithStyles, withStyles, Paper } from '@material-ui/core';
+import { Table, TableContainer, TableRow, TableHead, TableCell, TableBody, createStyles, WithStyles, withStyles, Paper } from '@material-ui/core';
 import { ConsolidatedEbayProduct } from '../services/EbayService';
 import { Check } from '@material-ui/icons';
 
@@ -20,7 +20,7 @@ const ProductTable: React.FC<WithStyles<typeof styles> & ProductTableProp> = (pr
   const { products, classes } = props;
   return (
     <Paper>
-      <TableContainer /* component={Card} */ className={classes.container}>
+      <TableContainer className={classes.container}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>

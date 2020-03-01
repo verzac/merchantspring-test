@@ -1,9 +1,8 @@
 import React from 'react';
-import { Typography, createStyles, Theme, withStyles, WithStyles, TextField, Box, FormLabel, Button, CircularProgress, LinearProgress } from '@material-ui/core';
+import { Typography, createStyles, Theme, withStyles, WithStyles, TextField, Box, Button, LinearProgress } from '@material-ui/core';
 import EbayService, { ConsolidatedEbayProduct } from './services/EbayService';
 import ProductTable from './components/ProductTable';
 import PageSection from './components/PageSection';
-import DataCard from './components/datacards/SimpleDataCard';
 import AveragePriceDataCard from './components/datacards/AveragePriceDataCard';
 import FreeShippingListingPercentageDataCard from './components/datacards/FreeShippingListingPercentageDataCard';
 import MinPriceDataCard from './components/datacards/MinPriceDataCard';
