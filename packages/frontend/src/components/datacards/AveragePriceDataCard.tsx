@@ -8,6 +8,7 @@ export default function (props: ProductDataCardProp) {
   if (firstProduct) {
     averagePriceString = products.reduce((acc, curr) => (acc + Number(curr.price.value)) / 2, Number(firstProduct.price.value))
       .toFixed(2);
+    averagePriceString = `${firstProduct.price.currency} ${averagePriceString}`;
   }
   return (
     <DataCard label="Average price" data={averagePriceString}/>

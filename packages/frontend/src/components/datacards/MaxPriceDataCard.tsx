@@ -8,6 +8,8 @@ export default function(props: ProductDataCardProp) {
   if (firstProduct) {
     maxPriceString = products.reduce((acc, curr) => acc < Number(curr.price.value) ? Number(curr.price.value) : acc, Number(firstProduct.price.value))
       .toFixed(2);
+    maxPriceString = `${firstProduct.price.currency} ${maxPriceString}`;
+
   }
   return <SimpleDataCard label="Maximum product price" data={maxPriceString} />
 }
