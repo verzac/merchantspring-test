@@ -12,4 +12,5 @@ function getRequiredEnv(envVarKey: string): string {
 
 export default {
   ebayAppId: getRequiredEnv('MS_TEST_EBAY_API_KEY'),
+  portNumber: Number(process.env.EXPRESS_PORT_NUMBER) || 8080,
 };

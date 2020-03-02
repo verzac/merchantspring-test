@@ -4,9 +4,11 @@ import cors from 'cors';
 import healthCheck from './utils/healthCheck';
 import productController from './controllers/product.controller';
 import withErrorHandling from './utils/withErrorHandling';
+import config from './config';
+import getCsvConverter from './utils/getCsvConverter';
 
 const app = express();
-const PORT_NUMBER = 8080;
+const PORT_NUMBER = config.portNumber;
 
 // middlewares
 app.use(cors());
@@ -36,18 +38,33 @@ app.get('/.health', async (req, res) => {
 });
 
 app.get('/product-search', withErrorHandling(async (req, res) => {
-  let keywords: string = req.query.keywords;
+  let keywords: string | undefined = req.query.keywords;
   if (!keywords) {
     return res.json({
       'message': 'You must pass in the ?keywords query param (e.g. ?keywords=ipad).',
     }).status(400);
   }
-  return res.json(await productController.getProducts(keywords)).status(200);
+  let csv: string | undefined = req.query.csv;
+  let data = await productController.getProducts(keywords);
+  if (csv === 'true') {
+    res.setHeader('Content-Disposition', `attachment;filename=products-${keywords}.csv`)
+    res.writeHead(200, { 'Content-Type': 'application/csv' });
+    res.flushHeaders();
+    let csvConverter = getCsvConverter();
+    csvConverter.toOutput(res);
+    csvConverter.input.push(JSON.stringify(data));
+    csvConverter.input.push(null);
+    return;
+  }
+  return res.json(data).status(200);
 }));
 
 // error handlers
 app.use(function (err, req, res, next) {
   logger.error(err);
+  if (res.headersSent) {
+    return next(err);
+  }
   return res.status(500).json({
     message: 'An unexpected error has occurred.'
   });

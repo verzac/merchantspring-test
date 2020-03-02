@@ -24,20 +24,29 @@ const App: React.FC<WithStyles<typeof styles>> = (props) => {
   const [formSearchQuery, setFormSearchQuery] = React.useState('');
   const [products, setProducts] = React.useState<Array<ConsolidatedEbayProduct> | undefined>(undefined);
   const [error, setError] = React.useState<any | undefined>(undefined);
+  const [keywords, setKeywords] = React.useState<string>('');
   const { classes } = props;
   function onSubmitSearch(event: React.FormEvent<HTMLFormElement>) {
     setIsLoading(true);
     event.preventDefault();
     EbayService.findProduct(formSearchQuery)
-      .then(products => setProducts(products))
-      .catch(e => {
+      .then(products => {
+        setProducts(products);
+        setKeywords(formSearchQuery);
+      }).catch(e => {
         setError(e);
         console.error(e);
       }).finally(() => setIsLoading(false));
   }
+
+  async function onDownload(keywords: string) {
+    return EbayService.downloadFindProduct(keywords);
+  }
+
   function onChangeSearchQuery(event: any) {
     setFormSearchQuery(event.target.value);
   }
+
   return (<div className={classes.root}>
     <Typography variant="h1">eBay Finder (BETA)</Typography>
     <PageSection>
@@ -70,7 +79,7 @@ const App: React.FC<WithStyles<typeof styles>> = (props) => {
           <FreeShippingListingPercentageDataCard products={products} />
           <AverageTitleLengthDataCard products={products} />
         </Box>
-        <ProductTable products={products} />
+        <ProductTable products={products} onDownload={() => { onDownload(keywords); }}/>
       </>}
       {error && <Typography color="error">An unexpected error has occurred. Please try again.</Typography>}
     </PageSection>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableContainer, TableRow, TableHead, TableCell, TableBody, createStyles, WithStyles, withStyles, Paper } from '@material-ui/core';
+import { Table, TableContainer, TableRow, TableHead, TableCell, TableBody, createStyles, WithStyles, withStyles, Paper, Toolbar, Button } from '@material-ui/core';
 import { ConsolidatedEbayProduct } from '../services/EbayService';
 import { Check } from '@material-ui/icons';
 
@@ -14,12 +14,16 @@ const styles = createStyles({
 
 interface ProductTableProp {
   products: Array<ConsolidatedEbayProduct>;
+  onDownload: () => any;
 };
 
 const ProductTable: React.FC<WithStyles<typeof styles> & ProductTableProp> = (props) => {
-  const { products, classes } = props;
+  const { products, classes, onDownload } = props;
   return (
     <Paper>
+      <Toolbar>
+        <Button color="inherit" onClick={onDownload}>Download as CSV</Button>
+      </Toolbar>
       <TableContainer className={classes.container}>
         <Table stickyHeader>
           <TableHead>
