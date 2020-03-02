@@ -15,11 +15,15 @@ The application should also provide a summary of the following metrics based on 
 
 Feel to add additional functionality which you believe may be of relevance for a business such as MerchantSpring.
 
+### NOTES ###
 ---
 * Product details: title, shipping status, price, namevaluelist perhaps? [X]
 * Average character length of the title [X]
 * % of listings with free shipping [X]
 * Product pricing: average, min and max [X]
-* CSV download []
+* CSV download [X]
 * Limit to 50 [X]
 * Sorted by popularity (as designed) [X]
+---
+> % of listings with free shipping: 56.00% -- just round it up
+> Price use AUD in the datacards (or dollar sign)
