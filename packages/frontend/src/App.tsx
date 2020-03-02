@@ -33,6 +33,7 @@ const App: React.FC<WithStyles<typeof styles>> = (props) => {
       .then(products => {
         setProducts(products);
         setKeywords(formSearchQuery);
+        setError(undefined);
       }).catch(e => {
         setError(e);
         console.error(e);
@@ -69,7 +70,7 @@ const App: React.FC<WithStyles<typeof styles>> = (props) => {
     </PageSection>
     <PageSection>
       {isLoading && <LinearProgress />}
-      {!isLoading && products && <>
+      {!isLoading && !error && products && <>
         <Typography variant="h2">Results</Typography>
         <Typography>Click on each product to go to their eBay page.</Typography>
         <Box display="flex" flexDirection="row" justifyContent="center" flexWrap="wrap">
