@@ -6,6 +6,7 @@ import logger from '../utils/logger';
 interface EbayFindItemsByKeywordsResponse {
   findItemsByKeywordsResponse: Array<{
     searchResult: Array<{
+      '@count': string;
       item: Array<EbayProduct>;
     }>;
   }>;
@@ -54,6 +55,9 @@ async function findProducts(keywords: string): Promise<Array<EbayProduct>> {
       },
       headers: DEFAULT_HEADERS,
     }).then(res => res.data);
+    if (result.findItemsByKeywordsResponse[0].searchResult[0]['@count'] === '0') {
+      return [];
+    }
     return result.findItemsByKeywordsResponse[0]
       .searchResult[0]
       .item;
